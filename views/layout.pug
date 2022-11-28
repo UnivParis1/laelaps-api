@@ -1,0 +1,11 @@
+extends ../node_modules/jade-bootstrap/_bootstrap
+
+append styles
+    link(rel="stylesheet", href="stylesheets/style.css")
+
+append body
+    .container
+        +navbar-logo("Laelaps","dropdown_menu", "default", "/", "images/laelaps.png")
+            +nav_item("/", (name === "index" ? "active" : undefined)) Interface de test
+            +nav_item("about", (name === "about" ? "active" : undefined)) Informations
+        block content

@@ -1,0 +1,9 @@
+#parse-button {
+    line-height: 0;
+}
+.navbar-brand {
+    padding: 5px;
+}
+#result-container {
+    margin-top: 2em;
+}
