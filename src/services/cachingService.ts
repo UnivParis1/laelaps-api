@@ -1,8 +1,7 @@
-const redis = require('redis');
-
+import {createClient} from "redis";
 
 const cachingService = {
-    redis: () => redis.createClient(),
+    redis: () => createClient(),
     store: (id, object) => {
         const redisClient = cachingService.redis();
         redisClient.connect().then(() => {
@@ -19,4 +18,4 @@ const cachingService = {
     }
 }
 
-module.exports = cachingService;
+export default cachingService;

@@ -1,13 +1,13 @@
-const celery = require('celery-node');
+import cachingService from "./cachingService";
 
-const uuid = require('node-uuid');
+import uuid from "node-uuid";
+import {createClient} from "celery-node";
 
-const cachingService = require("./cachingService")
 
 const parsingService = {
     createParsing: (reference) => {
         const id = uuid.v4();
-        const celery_client = celery.createClient(
+        const celery_client = createClient(
             'redis://localhost:6379/1',
             'redis://localhost:6379/2'
         );
@@ -19,4 +19,4 @@ const parsingService = {
     }
 }
 
-module.exports = parsingService;
+export default parsingService;

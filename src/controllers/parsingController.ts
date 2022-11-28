@@ -1,6 +1,6 @@
-const parsingService = require("../services/parsingService");
-const cachingService = require("../services/cachingService");
+import cachingService from "../services/cachingService";
 
+import parsingService from "../services/parsingService";
 
 const parsingController = {
     createParsing: (req, res) => {
@@ -12,4 +12,4 @@ const parsingController = {
     }
 }
 
-module.exports = parsingController;
+export default parsingController;
