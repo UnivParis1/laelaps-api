@@ -12,7 +12,7 @@ module.exports = {
         }]
     },
     output: {
-        filename: 'index.ts',
+        filename: 'index.js',
         path: path.resolve(__dirname, '..', 'public/javascripts')
     },
     resolve: {

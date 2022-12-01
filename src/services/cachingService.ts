@@ -2,7 +2,7 @@ import {createClient} from "redis";
 
 const cachingService = {
     redis: () => createClient(),
-    store: (id, object) => {
+    store: (id: string, object: Object) => {
         const redisClient = cachingService.redis();
         redisClient.connect().then(() => {
             redisClient.set(id, JSON.stringify(object)).catch((err1) => {
@@ -10,10 +10,10 @@ const cachingService = {
             })
         });
     },
-    get: async (id) => {
+    get: async (id: string): Promise<Object> => {
         const redisClient = await cachingService.redis();
         await redisClient.connect();
-        const data = await redisClient.get(id);
+        const data: string = await redisClient.get(id);
         return JSON.parse(data);
     }
 }
