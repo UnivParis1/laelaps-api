@@ -1,49 +1,38 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const axios_1 = __importDefault(require("axios"));
-const tf = __importStar(require("tableify"));
-let running = false, jobId = null, textArea, parseButton, parseButtonIcon, clearButton, preloadIcon, resultContainer = null;
-const isEmpty = () => {
+var axios_1 = require("axios");
+var tf = require("tableify");
+var running = false, jobId, textArea, parseButton, parseButtonIcon, preloadIcon, clearButton, resultContainer = null;
+var isEmpty = function () {
     return !!textArea.value.match(/^\s*$/);
 };
-const POLLING_DELAY = 1000;
-function pollServer() {
+var POLLING_DELAY = 1000;
+var pollServer = function () {
     if (!jobId)
         return;
-    setTimeout(askForJobState, POLLING_DELAY);
-}
-const askForJobState = () => {
-    axios_1.default.get(`/api/parsing/${jobId}`, { params: { reference: textArea.value } })
+    setTimeout(updateJobState, POLLING_DELAY);
+};
+var updateJobState = function () {
+    if (!running) {
+        return;
+    }
+    axios_1.default.get("/api/parsing/".concat(jobId), { params: { reference: textArea.value } })
         .then(function (response) {
-        jobId = response.data;
+        jobId = response.data.toString();
         if (response.data) {
-            resultContainer.innerHTML = tf(response.data['parsing']);
+            var _a = response.data['parsing'], id = _a.id, parsing = __rest(_a, ["id"]);
+            resultContainer.innerHTML = tf(parsing);
             resultContainer.querySelectorAll("table")[0].classList.add("table", "table-striped");
             jobId = null;
             running = false;
@@ -56,11 +45,11 @@ const askForJobState = () => {
         console.log(error);
     });
 };
-const updateButtonState = () => {
+var updateButtonState = function () {
     parseButton.disabled = isEmpty();
     clearButton.disabled = isEmpty();
     parseButtonIcon.style.visibility = running ? "hidden" : "visible";
-    preloadIcon.style.visibility = !running ? "hidden" : "visible";
+    preloadIcon.style.visibility = running ? "visible" : "hidden";
 };
 document.addEventListener("DOMContentLoaded", function () {
     textArea = document.getElementById("reference");
@@ -69,17 +58,16 @@ document.addEventListener("DOMContentLoaded", function () {
     preloadIcon = document.getElementById("parse-preload");
     parseButtonIcon = parseButton.querySelectorAll('.glyphicon')[0];
     resultContainer = document.getElementById("result-container");
-    textArea.addEventListener("input", () => {
+    textArea.addEventListener("input", function () {
         updateButtonState();
     });
-    clearButton.addEventListener("click", (e) => {
+    clearButton.addEventListener("click", function (e) {
         e.preventDefault();
-        running = false;
         textArea.value = '';
         resultContainer.innerHTML = '';
         updateButtonState();
     });
-    parseButton.addEventListener("click", (e) => {
+    parseButton.addEventListener("click", function (e) {
         e.preventDefault();
         running = true;
         updateButtonState();
@@ -91,6 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(function (error) {
             // handle error
             console.log(error);
+            running = false;
         });
         return false;
     });

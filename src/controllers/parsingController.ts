@@ -1,16 +1,15 @@
-import cachingService from "../services/cachingService";
-
 import parsingService from "../services/parsingService";
 
 import express from "express";
+import {Reference} from "../models/reference";
 
 const parsingController = {
     createParsing: (req: express.Request, res: express.Response) => {
-        res.send(parsingService.createParsing(req.body.reference));
+        res.json(parsingService.createParsing(new Reference(req.body.reference)));
     },
     getParsing: async (req: express.Request, res: express.Response) => {
-        const parsing = await cachingService.get(req.params.id);
-        res.send({success: true, parsing: parsing})
+        const reference = await parsingService.getParsing(req.params.id);
+        res.json({success: typeof (reference) == 'object' && Object.keys(reference).length > 1, parsing: reference.structured})
     }
 }
 
