@@ -1,14 +1,16 @@
 import cachingService from "./cachingService";
 import {createClient} from "celery-node";
 import Task from "celery-node/dist/app/task";
-import {Reference, StructuredReference} from "../models/reference"
+import Client from "celery-node/dist/app/client";
+import {Reference, StructuredReference} from "../models/reference";
 
 const parsingService = {
+    celery_client: () => createClient(
+        process.env.CELERY_BROKER,
+        process.env.CELERY_BACKEND,
+    ),
     createParsing: (reference: Reference): string => {
-        const celery_client = createClient(
-            'redis://localhost:6379/1',
-            'redis://localhost:6379/2'
-        );
+        const celery_client = parsingService.celery_client();
         const task: Task = celery_client.createTask("tasks.predict_fields");
         task.applyAsync([reference.fullText]).get().then((data: StructuredReference) => {
             reference.structured = data;
@@ -17,8 +19,7 @@ const parsingService = {
         return reference.id;
     },
     getParsing: async (id: string): Promise<Reference> => {
-        const reference: Reference = await cachingService.get(id);
-        return reference
+        return await cachingService.get(id);
     }
 }
 

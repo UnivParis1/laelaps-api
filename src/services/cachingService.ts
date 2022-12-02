@@ -2,7 +2,10 @@ import {createClient} from "redis";
 import {Reference} from "../models/reference";
 
 const cachingService = {
-    redis: () => createClient(),
+    redis: () => createClient({
+        url: process.env.REDIS_URL,
+        database: parseInt(process.env.REDIS_DATABASE)
+    }),
     store: (id: string, object: string) => {
         const redisClient = cachingService.redis();
         redisClient.connect().then(() => {
