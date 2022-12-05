@@ -1,11 +1,19 @@
 extends ../node_modules/jade-bootstrap/_bootstrap
 
-append styles
+block styles
+    link(rel="stylesheet", href="bootstrap-3.3.7/dist/css/bootstrap.css")
+    link(rel="stylesheet", href="bootstrap-3.3.7/dist/css/bootstrap-theme.css")
     link(rel="stylesheet", href="stylesheets/style.css")
 
 append body
     .container
         +navbar-logo("Laelaps","dropdown_menu", "default", "/", "images/laelaps.png")
+            li
+                h1 Laelaps
             +nav_item("/", (name === "index" ? "active" : undefined)) Interface de test
             +nav_item("about", (name === "about" ? "active" : undefined)) Informations
         block content
+
+block scripts
+    script(src="bootstrap-3.3.7/dist/js/jquery-3.6.1.min.js")
+    script(src="bootstrap-3.3.7/dist/js/bootstrap.js")

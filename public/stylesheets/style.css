@@ -1,9 +1,24 @@
+* {
+    font-size: 16px;
+    line-height: 2;
+}
+
+h1 {
+    margin: 1px 10px;
+}
+
 #parse-button {
-    line-height: 0;
+    padding: 18px 19px 0px 19px;
 }
+
+#clear-button {
+    padding: 19px 19px;
+}
+
 .navbar-brand {
-    padding: 5px;
+    padding: 8px;
 }
+
 #result-container {
     margin-top: 2em;
 }
