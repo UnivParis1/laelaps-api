@@ -128,3 +128,5 @@ dist
 .pnp.*
 
 .idea
+
+!public/bootstrap-3.3.7/dist
