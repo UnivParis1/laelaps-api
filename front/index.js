@@ -27,7 +27,7 @@ var updateJobState = function () {
     if (!running) {
         return;
     }
-    axios_1.default.get("/api/parsing/".concat(jobId), { params: { reference: textArea.value } })
+    axios_1.default.get("/api/parsing/".concat(jobId))
         .then(function (response) {
         jobId = response.data.toString();
         if (response.data) {

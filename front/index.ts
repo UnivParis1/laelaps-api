@@ -24,7 +24,7 @@ const updateJobState = (): void => {
     if (!running) {
         return;
     }
-    axios.get<AxiosResponse>(`/api/parsing/${jobId}`, {params: {reference: textArea.value}})
+    axios.get<AxiosResponse>(`/api/parsing/${jobId}`)
         .then(response => {
             jobId = response.data.toString();
             if (response.data) {
